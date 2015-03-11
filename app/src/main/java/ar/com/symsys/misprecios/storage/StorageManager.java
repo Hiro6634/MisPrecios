@@ -47,6 +47,7 @@ public class StorageManager {
     public void AddPrice(Price price){
         pricesDataSource.addPrice(price);
     }
+    public Li
 
     // Market Queries
     public List<Market> getAllMarkets(){

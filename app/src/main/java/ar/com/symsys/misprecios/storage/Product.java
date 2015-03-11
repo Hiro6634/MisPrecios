@@ -4,16 +4,16 @@ package ar.com.symsys.misprecios.storage;
  * Created by hsuyama on 10/03/2015.
  */
 public class Product {
-    private int         ProductId;
+    private long        ProductId;
     private int         BrandId;
     private String      Category;
     private String      Description;
 
-    public int getProductId() {
+    public long getProductId() {
         return ProductId;
     }
 
-    public void setProductId(int productId) {
+    public void setProductId(long productId) {
         ProductId = productId;
     }
 

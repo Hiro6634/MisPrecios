@@ -87,7 +87,7 @@ public class ProductsDataSource {
     public Product readCursor( Cursor cursor ){
         Product             product = new Product();
 
-        product.setProductId(cursor.getInt(ProductsTableSchema.colPRODUCT_ID));
+        product.setProductId(cursor.getLong(ProductsTableSchema.colPRODUCT_ID));
         product.setBrandId(cursor.getInt(ProductsTableSchema.colBRAND_ID));
         product.setCategory(cursor.getString(ProductsTableSchema.colCATEGORY));
         product.setDescription(cursor.getString(ProductsTableSchema.colDESCRIPTION));

@@ -55,6 +55,41 @@ public class PricesDataSource {
         }
     }
 
+    public List<Price> findPriceByProductId( long productId ){
+        ArrayList<Price> priceList = new ArrayList<Price>();
+        synchronized (this){
+            try{
+                openDataBase();
+
+                Cursor cursor = database.query(
+                        PricesTableSchema.TABLE_NAME,
+                        PricesTableSchema.COLUMNS,
+                        PricesTableSchema.PRODUCT_ID + " = ? ",
+                        new String[] {String.valueOf(productId)},
+                        null, null, null);
+
+                if( cursor.moveToFirst(){
+                    while (cursor.isAfterLast()){
+                        priceList.add(readCursor(cursor));
+                        cursor.moveToNext();
+                    }
+                }
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+            finally {
+                try{
+                    closeDataBase();
+                }
+                catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }
+        return priceList;
+    }
+
     public List<Price> getAllPrices() {
         ArrayList<Price> priceList = new ArrayList<Price>();
         synchronized (this) {
@@ -67,10 +102,9 @@ public class PricesDataSource {
                         null, null, null, null, null);
 
                 if (cursor.moveToFirst()) {
-                    while (cursor.moveToFirst()) {
-                        while (cursor.isAfterLast()) {
-                            priceList.add(readCursor(cursor));
-                        }
+                    while (cursor.isAfterLast()) {
+                        priceList.add(readCursor(cursor));
+                        cursor.moveToNext();
                     }
                 }
             } catch (Exception e) {
@@ -90,7 +124,7 @@ public class PricesDataSource {
         Price   price = new Price();
         Time    time = new Time();
 
-        price.setProductId(cursor.getInt(PricesTableSchema.colPRODUCT_ID));
+        price.setProductId(cursor.getLong(PricesTableSchema.colPRODUCT_ID));
         price.setMarketId(cursor.getInt(PricesTableSchema.colMARKET_ID));
         time.set(cursor.getInt(PricesTableSchema.colTIMESTAMP));
         price.setTimeStamp(time);
