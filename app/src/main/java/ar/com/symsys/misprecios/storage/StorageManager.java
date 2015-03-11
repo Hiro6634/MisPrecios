@@ -47,7 +47,10 @@ public class StorageManager {
     public void AddPrice(Price price){
         pricesDataSource.addPrice(price);
     }
-    public Li
+
+    public List<Price> findPriceByProductId( long productId ){
+        return pricesDataSource.findPriceByProductId(productId);
+    }
 
     // Market Queries
     public List<Market> getAllMarkets(){

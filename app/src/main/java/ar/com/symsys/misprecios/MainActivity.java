@@ -13,12 +13,15 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.util.List;
+
+import ar.com.symsys.misprecios.storage.Price;
 import ar.com.symsys.misprecios.storage.StorageManager;
 
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener{
     private Button      btnButton;
-    private TextView    tvFormat, tvContent;
+    private TextView    tvFormat, tvContent, tvTest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +29,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         StorageManager.getInstance().setContext(getApplicationContext());
 
-        btnButton = (Button)findViewById(R.id.scan_button);
-        tvContent = (TextView)findViewById(R.id.scan_content);
-        tvFormat = (TextView)findViewById(R.id.scan_format);
+        btnButton   = (Button)findViewById(R.id.scan_button);
+        tvContent   = (TextView)findViewById(R.id.scan_content);
+        tvFormat    = (TextView)findViewById(R.id.scan_format);
+        tvTest      = (TextView)findViewById(R.id.test);
 
         btnButton.setOnClickListener(this);
+
     }
 
 
@@ -38,7 +43,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-
 
         return true;
     }
@@ -68,6 +72,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent){
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent );
+        List<Price> prices;
 
         if(scanningResult != null){
             String scanContent = scanningResult.getContents();
@@ -75,6 +80,21 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
             tvFormat.setText("FORMAT: " + scanFormat);
             tvContent.setText("CONTENT: " + scanContent);
+
+            prices = StorageManager.getInstance().findPriceByProductId(Long.parseLong(scanContent));
+
+            if( prices.size() == 0 ){
+                Intent toolIntent = new Intent(this, ToolsActivity.class);
+                startActivity(toolIntent);
+
+
+            }
+            String theText = "";
+            for( Price price : prices){
+                theText += String.valueOf(price.getBulkPrice()) + "\n";
+            }
+
+            tvTest.setText(theText);
         }
         else{
             Toast.makeText(getApplicationContext(),"No scan data received!", Toast.LENGTH_SHORT).show();

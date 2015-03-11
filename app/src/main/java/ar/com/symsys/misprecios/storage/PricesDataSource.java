@@ -68,8 +68,8 @@ public class PricesDataSource {
                         new String[] {String.valueOf(productId)},
                         null, null, null);
 
-                if( cursor.moveToFirst(){
-                    while (cursor.isAfterLast()){
+                if( cursor.moveToFirst()){
+                    while (!cursor.isAfterLast()){
                         priceList.add(readCursor(cursor));
                         cursor.moveToNext();
                     }
