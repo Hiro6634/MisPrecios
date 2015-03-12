@@ -81,7 +81,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             tvFormat.setText("FORMAT: " + scanFormat);
             tvContent.setText("CONTENT: " + scanContent);
 
-            prices = StorageManager.getInstance().findPriceByProductId(Long.parseLong(scanContent));
+            prices = StorageManager.getInstance().findPriceByProductId(scanContent);
 
             if( prices.size() == 0 ){
                 Intent toolIntent = new Intent(this, ToolsActivity.class);
@@ -89,7 +89,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
 
             }
-            String theText = "";
+            String theText = "PRECIO: ";
             for( Price price : prices){
                 theText += String.valueOf(price.getBulkPrice()) + "\n";
             }

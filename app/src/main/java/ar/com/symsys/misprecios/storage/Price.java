@@ -6,17 +6,17 @@ import android.text.format.Time;
  * Created by hsuyama on 10/03/2015.
  */
 public class Price {
-    private long        ProductId;
+    private String      ProductId;
     private int         MarketId;
     private Time        TimeStamp;
     private float       BulkPrice;
     private int         BulkQuantity;
 
-    public long getProductId() {
+    public String getProductId() {
         return ProductId;
     }
 
-    public void setProductId(long productId) {
+    public void setProductId(String productId) {
         ProductId = productId;
     }
 

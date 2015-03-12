@@ -7,7 +7,7 @@
 
     <Button
         android:id="@+id/scan_button"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:text="@string/btn_scan" />
@@ -34,6 +34,6 @@
         android:layout_height="wrap_content"
         android:textIsSelectable="true"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/scan_format" />
+        android:layout_below="@+id/scan_content" />
 
 </RelativeLayout>

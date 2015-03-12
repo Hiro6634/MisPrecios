@@ -1,17 +1,23 @@
 package ar.com.symsys.misprecios;
 
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class ToolsActivity extends ActionBarActivity {
+public class ToolsActivity extends FragmentActivity{
+    public String getAraca() {
+        return araca;
+    }
 
+    private String araca;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tools);
+        araca = "PRODUCTO NO ENCONTRADO";
     }
 
 

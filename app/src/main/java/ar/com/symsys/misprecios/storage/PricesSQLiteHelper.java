@@ -12,10 +12,10 @@ import android.text.format.Time;
  */
 public class PricesSQLiteHelper extends SQLiteOpenHelper {
     private static final String     dbName              = "MyPrices";
-    private static final int        dbVersion           = 2;
+    private static final int        dbVersion           = 1;
     private static final String     sqlCreateProducts   = "CREATE TABLE "
             + PricesTableSchema.TABLE_NAME + " ("
-            + PricesTableSchema.PRODUCT_ID      + " INTEGER, "
+            + PricesTableSchema.PRODUCT_ID      + " TEXT, "
             + PricesTableSchema.MARKET_ID       + " INTEGER, "
             + PricesTableSchema.TIMESTAMP       + " INTEGER, "
             + PricesTableSchema.BULK_PRICE      + " REAL, "
@@ -29,6 +29,8 @@ public class PricesSQLiteHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(sqlCreateProducts);
+
+
 
         loadDB(db);
     }
@@ -44,7 +46,7 @@ public class PricesSQLiteHelper extends SQLiteOpenHelper {
         Time today = new Time();
         ContentValues values = new ContentValues();
 
-        values.put(PricesTableSchema.PRODUCT_ID,  111111);
+        values.put(PricesTableSchema.PRODUCT_ID,  "7790045824890");
         values.put(PricesTableSchema.MARKET_ID, 1);
         today.setToNow();
         values.put(PricesTableSchema.TIMESTAMP, today.toMillis(true));
@@ -56,7 +58,7 @@ public class PricesSQLiteHelper extends SQLiteOpenHelper {
                 null,
                 values);
 
-        values.put(PricesTableSchema.PRODUCT_ID,  222222);
+        values.put(PricesTableSchema.PRODUCT_ID,  "7790045824810");
         values.put(PricesTableSchema.MARKET_ID, 1);
         today.setToNow();
         values.put(PricesTableSchema.TIMESTAMP, today.toMillis(true));
@@ -68,11 +70,23 @@ public class PricesSQLiteHelper extends SQLiteOpenHelper {
                 null,
                 values);
 
-        values.put(PricesTableSchema.PRODUCT_ID,  111111);
+        values.put(PricesTableSchema.PRODUCT_ID,  "7790045824890");
         values.put(PricesTableSchema.MARKET_ID, 2);
         today.setToNow();
         values.put(PricesTableSchema.TIMESTAMP, today.toMillis(true));
         values.put(PricesTableSchema.BULK_PRICE, 12.0);
+        values.put(PricesTableSchema.BULK_QUANTITY, 1);
+
+        db.insertOrThrow(
+                PricesTableSchema.TABLE_NAME,
+                null,
+                values);
+
+        values.put(PricesTableSchema.PRODUCT_ID,  "7790045824893");
+        values.put(PricesTableSchema.MARKET_ID, 2);
+        today.setToNow();
+        values.put(PricesTableSchema.TIMESTAMP, today.toMillis(true));
+        values.put(PricesTableSchema.BULK_PRICE, 15.0);
         values.put(PricesTableSchema.BULK_QUANTITY, 1);
 
         db.insertOrThrow(
