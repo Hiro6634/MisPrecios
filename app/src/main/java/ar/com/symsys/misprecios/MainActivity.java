@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,7 +22,6 @@ import ar.com.symsys.misprecios.storage.StorageManager;
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener{
     private Button      btnButton;
-    private TextView    tvFormat, tvContent, tvTest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +30,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         StorageManager.getInstance().setContext(getApplicationContext());
 
         btnButton   = (Button)findViewById(R.id.scan_button);
-        tvContent   = (TextView)findViewById(R.id.scan_content);
-        tvFormat    = (TextView)findViewById(R.id.scan_format);
-        tvTest      = (TextView)findViewById(R.id.test);
 
         btnButton.setOnClickListener(this);
 
@@ -75,31 +72,30 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         List<Price> prices;
 
         if(scanningResult != null){
+
             String scanContent = scanningResult.getContents();
-            String scanFormat = scanningResult.getFormatName();
 
-            tvFormat.setText("FORMAT: " + scanFormat);
-            tvContent.setText("CONTENT: " + scanContent);
+            if( scanContent != null) {
+                prices = StorageManager.getInstance().findPriceByProductId(scanContent);
 
-            prices = StorageManager.getInstance().findPriceByProductId(scanContent);
-
-            if( prices.size() == 0 ){
-                Intent toolIntent = new Intent(this, ToolsActivity.class);
-                toolIntent.putExtra(ToolsActivity.PRODUCT_ID,  scanContent);
-                startActivity(toolIntent);
-
-
+                if (prices.size() == 0) {
+                    Intent toolIntent = new Intent(this, ToolsActivity.class);
+                    toolIntent.putExtra(ToolsActivity.PRODUCT_ID, scanContent);
+                    startActivity(toolIntent);
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(),"Ahora los resultados", Toast.LENGTH_SHORT).show();
+                }
             }
-            String theText = "PRECIO: ";
-            for( Price price : prices){
-                theText += String.valueOf(price.getBulkPrice()) + "\n";
-            }
-
-            tvTest.setText(theText);
         }
         else{
             Toast.makeText(getApplicationContext(),"No scan data received!", Toast.LENGTH_SHORT).show();
         }
     }
+    protected void ShowResults( List<Prices> prices ){
+        ListView listView = (ListView)findViewById(R.id.listView);
 
+
+    }
 }
