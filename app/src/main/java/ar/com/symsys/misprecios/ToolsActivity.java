@@ -1,5 +1,6 @@
 package ar.com.symsys.misprecios;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -8,16 +9,26 @@ import android.view.MenuItem;
 
 
 public class ToolsActivity extends FragmentActivity{
+    public static final String PRODUCT_ID = "ProductId";
+    private String productId="";
+
+
     public String getAraca() {
         return araca;
     }
 
     private String araca;
+
+    public String getProductId() {
+        return productId;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tools);
-        araca = "PRODUCTO NO ENCONTRADO";
+        Intent intent = getIntent();
+        productId = intent.getStringExtra(PRODUCT_ID);
     }
 
 

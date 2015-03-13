@@ -85,6 +85,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
             if( prices.size() == 0 ){
                 Intent toolIntent = new Intent(this, ToolsActivity.class);
+                toolIntent.putExtra(ToolsActivity.PRODUCT_ID,  scanContent);
                 startActivity(toolIntent);
 
 
