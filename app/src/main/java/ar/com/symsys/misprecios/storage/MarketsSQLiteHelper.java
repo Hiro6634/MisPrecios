@@ -10,8 +10,8 @@ import java.sql.SQLClientInfoException;
  * Created by hsuyama on 10/03/2015.
  */
 public class MarketsSQLiteHelper extends SQLiteOpenHelper {
-    private static final String     dbName              = "MyPrices";
-    private static final int        dbVersion           = 3;
+    private static final String     dbName              = "MyPricesMarkets";
+    private static final int        dbVersion           = 1;
     private static final String     sqlCreateMarkets   = "CREATE TABLE "
             + MarketsTableSchema.TABLE_NAME + " ("
             + MarketsTableSchema.MARKET_ID      + " INTEGER PRIMARY KEY AUTOINCREMENT, "

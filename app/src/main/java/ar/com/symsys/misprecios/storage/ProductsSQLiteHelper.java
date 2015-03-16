@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class ProductsSQLiteHelper extends SQLiteOpenHelper {
     private static final String     dbName              = "MyPrices";
-    private static final int        dbVersion           = 1;
     private static final String     sqlCreateProducts   = "CREATE TABLE "
             + ProductsTableSchema.TABLE_NAME + " ("
             + ProductsTableSchema.PRODUCT_ID    + " INTEGER PRIMARY KEY, "
@@ -19,7 +18,7 @@ public class ProductsSQLiteHelper extends SQLiteOpenHelper {
 
 
     public ProductsSQLiteHelper(Context context){
-        super(context, dbName, null, dbVersion);
+        super(context, dbName, null, StorageManager.getInstance().dbVersion);
     }
 
     @Override

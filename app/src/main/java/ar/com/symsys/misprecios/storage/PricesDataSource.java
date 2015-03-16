@@ -62,15 +62,19 @@ public class PricesDataSource {
                 openDataBase();
 
                 Cursor cursor = database.query(
-                        PricesTableSchema.TABLE_NAME,
-                        PricesTableSchema.COLUMNS,
-                        PricesTableSchema.PRODUCT_ID + " = ? ",
-                        new String[] {productId},
-                        null, null, null);
+                        PricesTableSchema.TABLE_NAME,           //TABLE NAME
+                        PricesTableSchema.COLUMNS,              //COLUMNS
+                        PricesTableSchema.PRODUCT_ID + " = ?",  //SELECTION
+                        new String[]{productId},                //SELECTION ARGS
+                        null,                                   //GROUP BY
+                        null,                                   //HAVING
+                        null);                                  //ORDER BY
+//                      PricesTableSchema.TIMESTAMP);           //ORDER BY
 
                 if( cursor.moveToFirst()){
                     while (!cursor.isAfterLast()){
-                        priceList.add(readCursor(cursor));
+                        Price price = readCursor(cursor);
+                        priceList.add(price);
                         cursor.moveToNext();
                     }
                 }
@@ -120,33 +124,16 @@ public class PricesDataSource {
         return priceList;
     }
 
-    public List<Price> getPricesbyProductId(String productId) {
-        ArrayList<Price> priceList = new ArrayList<Price>();
-        synchronized (this) {
-            try {
-                openDataBase();
+    public Price readCursor(Cursor cursor) {
+        Price price = new Price();
+        Time time = new Time();
 
-                Cursor cursor = database.query(
-                        PricesTableSchema.TABLE_NAME,
-                        PricesTableSchema.COLUMNS,
-                        null, null, null, null, null);
-
-                if (cursor.moveToFirst()) {
-                    while (cursor.isAfterLast()) {
-                        priceList.add(readCursor(cursor));
-                        cursor.moveToNext();
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    closeDataBase();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return priceList;
+        price.setProductId(cursor.getString(PricesTableSchema.colPRODUCT_ID));
+        price.setBulkQuantity(cursor.getInt(PricesTableSchema.colBULK_QUANTITY));
+        price.setBulkPrice(cursor.getFloat(PricesTableSchema.colBULK_PRICE));
+        time.set(cursor.getLong(PricesTableSchema.colTIMESTAMP));
+        price.setTimeStamp(time);
+        price.setMarketId(cursor.getInt(PricesTableSchema.colMARKET_ID));
+        return price;
     }
 }

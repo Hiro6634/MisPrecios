@@ -114,15 +114,34 @@ public class MarketsDataSource {
         return market;
     }
 
-    public Cursor fetchAllMarkets(){
-        Cursor cursor = database.query(
-                MarketsTableSchema.TABLE_NAME,
-                MarketsTableSchema.COLUMNS,
-                null, null, null, null, null);
-        if(cursor != null ){
-            cursor.moveToFirst();
+    public Market findMarket( int marketId){
+        Market market = null;
+        synchronized (this) {
+            try {
+                openDataBase();
+
+                Cursor cursor = database.query(
+                        MarketsTableSchema.TABLE_NAME,
+                        MarketsTableSchema.COLUMNS,
+                        null,null,
+//                        MarketsTableSchema.MARKET_ID + " = ?",
+//                        new String[]{String.valueOf(marketId)},
+                        null, null, null);
+                if(cursor != null ){
+                    cursor.moveToFirst();
+                    market = readCursor(cursor);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    closeDataBase();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
-        return cursor;
+        return market;
     }
 }

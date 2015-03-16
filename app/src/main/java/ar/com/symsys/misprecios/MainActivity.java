@@ -34,8 +34,13 @@ import ar.com.symsys.misprecios.storage.StorageManager;
 
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener{
-    private Button      btnButton;
-    private ListView    listView;
+    private Button                          btnButton;
+    private ListView                        listView;
+    private List<HashMap<String, String>>   pricesList = null;
+    private String[]                        pricesFrom;
+    private int[]                           pricesTo;
+    private SimpleAdapter                   pricesAdapter = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,34 +50,25 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         btnButton   = (Button)findViewById(R.id.scan_button);
 
         btnButton.setOnClickListener(this);
+        pricesFrom = new String[]{
+                "PRICE",
+                "QUANTITY",
+                "DATE",
+                "MARKET"};
+        pricesTo = new int[]{R.id.price, R.id.quantity, R.id.date, R.id.market_name};
 
-        try{
-            List<Market> list = StorageManager.getInstance().getAllMarkets();
-            String[] from = new String[]{
-                    "PRICE",
-                    "QUANTITY"
-                    "DATE",
-                    "MARKET"};
-            int[] to = new int[]{R.id.price, R.id.date, R.id.market_name};
-
-            List<HashMap<String, String>> values = new ArrayList<HashMap<String, String>>();
-            for( Market market : list) {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("ID", String.valueOf(market.getMarketId()));
-                map.put("NAME", market.getName());
-                map.put("LOCATION", market.getLocation());
-                values.add(map);
-            }
-            SimpleAdapter adapter = new SimpleAdapter(this, values, R.layout.market_list_item_layout, from, to);
-
-            listView = (ListView)findViewById(R.id.listView);
-            listView.setAdapter(adapter);
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
     }
 
+    @Override
+    protected void onResume(){
+        super.onResume();
+        Toast.makeText(getApplicationContext(), "Resume", Toast.LENGTH_SHORT).show();
+
+        if(pricesAdapter!=null){
+
+            listView.setAdapter(pricesAdapter);
+        }
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -122,15 +118,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 }
                 else
                 {
-                    ListView listView = (ListView)findViewById(R.id.listView);
-
-                    String[] values = new String[]{"Android", "iPhone", "WindowsMobile",
-                            "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
-                            "Linux", "OS/2"};
-
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.price_list_item_layout,values);
-                    listView.setAdapter(adapter);
-                    //Toast.makeText(getApplicationContext(),"Ahora los resultados", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Ahora los resultados", Toast.LENGTH_SHORT).show();
+                    ShowResults(prices);
                 }
             }
         }
@@ -141,6 +130,26 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     protected void ShowResults( List<Price> prices ){
         ListView listView = (ListView)findViewById(R.id.listView);
 
+        try{
+            Market market;
+
+            pricesList = new ArrayList<HashMap<String, String>>();
+            for( Price price : prices) {
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("PRICE", String.valueOf(price.getBulkPrice()));
+                map.put("QUANTITY", String.valueOf(price.getBulkQuantity()));
+                map.put("DATE", price.getTimeStamp().format("%Y-%m-%d"));
+                market = StorageManager.getInstance().findMarket(price.getMarketId());
+                map.put("MARKET", market.getName() + "-" + market.getLocation());
+                pricesList.add(map);
+            }
+            pricesAdapter = new SimpleAdapter(this, pricesList, R.layout.price_list_item_layout, pricesFrom, pricesTo);
+
+            listView.setAdapter(pricesAdapter);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
 
     }
 }

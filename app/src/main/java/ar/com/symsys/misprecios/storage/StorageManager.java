@@ -9,8 +9,9 @@ import java.util.List;
  * Created by hsuyama on 10/03/2015.
  */
 public class StorageManager {
-    private static StorageManager ourInstance = new StorageManager();
-    public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    private static StorageManager   ourInstance = new StorageManager();
+    public static final String      DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    public static final int         dbVersion = 1;
 
     private ProductsDataSource      productsDataSource;
     private PricesDataSource        pricesDataSource;
@@ -66,7 +67,7 @@ public class StorageManager {
         marketsDataSource.addMarket(market);
     }
 
-    public Cursor fetchAllMarkets(){
-        return marketsDataSource.fetchAllMarkets();
+    public Market findMarket( int marketId ){
+        return marketsDataSource.findMarket(marketId);
     }
 }

@@ -12,7 +12,6 @@ import android.text.format.Time;
  */
 public class PricesSQLiteHelper extends SQLiteOpenHelper {
     private static final String     dbName              = "MyPrices";
-    private static final int        dbVersion           = 1;
     private static final String     sqlCreateProducts   = "CREATE TABLE "
             + PricesTableSchema.TABLE_NAME + " ("
             + PricesTableSchema.PRODUCT_ID      + " TEXT, "
@@ -23,7 +22,7 @@ public class PricesSQLiteHelper extends SQLiteOpenHelper {
 
 
     public PricesSQLiteHelper(Context context){
-        super(context, dbName, null, dbVersion);
+        super(context, dbName, null, StorageManager.getInstance().dbVersion);
     }
 
     @Override
