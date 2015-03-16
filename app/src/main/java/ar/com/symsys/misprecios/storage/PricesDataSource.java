@@ -120,17 +120,33 @@ public class PricesDataSource {
         return priceList;
     }
 
-    public Price readCursor( Cursor cursor ){
-        Price   price = new Price();
-        Time    time = new Time();
+    public List<Price> getPricesbyProductId(String productId) {
+        ArrayList<Price> priceList = new ArrayList<Price>();
+        synchronized (this) {
+            try {
+                openDataBase();
 
-        price.setProductId(cursor.getString(PricesTableSchema.colPRODUCT_ID));
-        price.setMarketId(cursor.getInt(PricesTableSchema.colMARKET_ID));
-        time.set(cursor.getInt(PricesTableSchema.colTIMESTAMP));
-        price.setTimeStamp(time);
-        price.setBulkPrice(cursor.getFloat(PricesTableSchema.colBULK_PRICE));
-        price.setBulkQuantity(cursor.getInt(PricesTableSchema.colBULK_QUANTITY));
+                Cursor cursor = database.query(
+                        PricesTableSchema.TABLE_NAME,
+                        PricesTableSchema.COLUMNS,
+                        null, null, null, null, null);
 
-        return price;
+                if (cursor.moveToFirst()) {
+                    while (cursor.isAfterLast()) {
+                        priceList.add(readCursor(cursor));
+                        cursor.moveToNext();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    closeDataBase();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return priceList;
     }
 }

@@ -1,28 +1,41 @@
 package ar.com.symsys.misprecios;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.sql.SQLClientInfoException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
+import ar.com.symsys.misprecios.storage.Market;
+import ar.com.symsys.misprecios.storage.MarketsTableSchema;
 import ar.com.symsys.misprecios.storage.Price;
 import ar.com.symsys.misprecios.storage.StorageManager;
 
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener{
     private Button      btnButton;
-
+    private ListView    listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,8 +46,32 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         btnButton.setOnClickListener(this);
 
-    }
+        try{
+            List<Market> list = StorageManager.getInstance().getAllMarkets();
+            String[] from = new String[]{
+                    "PRICE",
+                    "QUANTITY"
+                    "DATE",
+                    "MARKET"};
+            int[] to = new int[]{R.id.price, R.id.date, R.id.market_name};
 
+            List<HashMap<String, String>> values = new ArrayList<HashMap<String, String>>();
+            for( Market market : list) {
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("ID", String.valueOf(market.getMarketId()));
+                map.put("NAME", market.getName());
+                map.put("LOCATION", market.getLocation());
+                values.add(map);
+            }
+            SimpleAdapter adapter = new SimpleAdapter(this, values, R.layout.market_list_item_layout, from, to);
+
+            listView = (ListView)findViewById(R.id.listView);
+            listView.setAdapter(adapter);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -85,7 +122,15 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 }
                 else
                 {
-                    Toast.makeText(getApplicationContext(),"Ahora los resultados", Toast.LENGTH_SHORT).show();
+                    ListView listView = (ListView)findViewById(R.id.listView);
+
+                    String[] values = new String[]{"Android", "iPhone", "WindowsMobile",
+                            "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
+                            "Linux", "OS/2"};
+
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.price_list_item_layout,values);
+                    listView.setAdapter(adapter);
+                    //Toast.makeText(getApplicationContext(),"Ahora los resultados", Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -93,7 +138,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             Toast.makeText(getApplicationContext(),"No scan data received!", Toast.LENGTH_SHORT).show();
         }
     }
-    protected void ShowResults( List<Prices> prices ){
+    protected void ShowResults( List<Price> prices ){
         ListView listView = (ListView)findViewById(R.id.listView);
 
 

@@ -53,6 +53,27 @@ public class MarketsDataSource {
         }
     }
 
+    public void addMarket( int marketId, String name, String location ) {
+        synchronized (this) {
+            try {
+                openDataBase();
+                ContentValues values = new ContentValues();
+
+                values.put(MarketsTableSchema.MARKET_ID, marketId);
+                values.put(MarketsTableSchema.NAME, name);
+                values.put(MarketsTableSchema.LOCATION, location);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    closeDataBase();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     public List<Market> getAllMarkets() {
         ArrayList<Market> marketList = new ArrayList<Market>();
         synchronized (this) {
@@ -65,10 +86,9 @@ public class MarketsDataSource {
                         null, null, null, null, null);
 
                 if (cursor.moveToFirst()) {
-                    while (cursor.moveToFirst()) {
-                        while (cursor.isAfterLast()) {
-                            marketList.add(readCursor(cursor));
-                        }
+                    while (!cursor.isAfterLast()) {
+                        marketList.add(readCursor(cursor));
+                        cursor.moveToNext();
                     }
                 }
             } catch (Exception e) {
@@ -92,5 +112,17 @@ public class MarketsDataSource {
         market.setLocation(cursor.getString(MarketsTableSchema.colLOCATION));
 
         return market;
+    }
+
+    public Cursor fetchAllMarkets(){
+        Cursor cursor = database.query(
+                MarketsTableSchema.TABLE_NAME,
+                MarketsTableSchema.COLUMNS,
+                null, null, null, null, null);
+        if(cursor != null ){
+            cursor.moveToFirst();
+        }
+
+        return cursor;
     }
 }

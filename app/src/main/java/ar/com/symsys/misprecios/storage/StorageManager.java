@@ -1,6 +1,7 @@
 package ar.com.symsys.misprecios.storage;
 
 import android.content.Context;
+import android.database.Cursor;
 
 import java.util.List;
 
@@ -53,11 +54,19 @@ public class StorageManager {
     }
 
     // Market Queries
+    public MarketsDataSource getMarketsDS(){
+        return marketsDataSource;
+    }
+
     public List<Market> getAllMarkets(){
         return marketsDataSource.getAllMarkets();
     }
 
     public void AddMarket(Market market){
         marketsDataSource.addMarket(market);
+    }
+
+    public Cursor fetchAllMarkets(){
+        return marketsDataSource.fetchAllMarkets();
     }
 }
