@@ -8,9 +8,9 @@
         android:id="@+id/price"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="3"
         android:text="$10.00"
-        android:textSize="20px" />
+        android:textSize="30px" />
 
     <TextView
         android:id="@+id/quantity"
@@ -18,21 +18,21 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="1"
-        android:textSize="20px" />
+        android:textSize="30px" />
 
     <TextView
         android:id="@+id/date"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="4"
         android:text="10/02/15"
-        android:textSize="20px" />
+        android:textSize="30px" />
 
     <TextView
         android:id="@+id/market_name"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
+        android:layout_weight="6"
         android:text="Chango Mas"
-        android:textSize="20px" />
+        android:textSize="30px" />
 </LinearLayout>

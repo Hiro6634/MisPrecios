@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.google.android.gms.plus.PlusOneButton;
@@ -24,10 +25,12 @@ import com.google.android.gms.plus.PlusOneButton;
  * Use the {@link AddProductFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AddProductFragment extends Fragment {
+public class AddProductFragment extends Fragment implements View.OnClickListener{
 
     LinearLayout linearLayout;
     EditText etProductId;
+
+    Button      btnAccept, btnCancel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -37,6 +40,12 @@ public class AddProductFragment extends Fragment {
 
         linearLayout = (LinearLayout)view.findViewById(R.id.linearLayout);
         etProductId = (EditText)view.findViewById(R.id.editProductId);
+        btnAccept = (Button)view.findViewById(R.id.btn_add_product_accept);
+        btnCancel = (Button)view.findViewById(R.id.btn_add_product_cancel);
+
+        btnAccept.setOnClickListener(this);
+        btnCancel.setOnClickListener(this);
+
         return view;
     }
 
@@ -45,5 +54,18 @@ public class AddProductFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         etProductId.setText(((ToolsActivity)getActivity()).getProductId());
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.btn_add_product_accept:
+                Toast.makeText(getActivity().getApplicationContext(),"Saving Data Fake",Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.btn_add_product_cancel:
+                getActivity().onBackPressed();
+                break;
+        }
     }
 }

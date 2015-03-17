@@ -12,6 +12,6 @@
     <string name="label_product_category">Categoría: </string>
     <string name="label_product_description">Descripción: </string>
     <string name="btn_accept">Aceptar</string>
-    <string name="btn_cancel">Cancear</string>
+    <string name="btn_cancel">Cancelar</string>
 
 </resources>

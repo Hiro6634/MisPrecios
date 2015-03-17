@@ -40,6 +40,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private String[]                        pricesFrom;
     private int[]                           pricesTo;
     private SimpleAdapter                   pricesAdapter = null;
+    private static List<Price>              prices;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,11 +63,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     @Override
     protected void onResume(){
         super.onResume();
-        Toast.makeText(getApplicationContext(), "Resume", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "Resume", Toast.LENGTH_SHORT).show();
 
-        if(pricesAdapter!=null){
+        if(prices != null && prices.size() > 0){
 
-            listView.setAdapter(pricesAdapter);
+            ShowResults(prices);
         }
     }
     @Override
@@ -102,7 +103,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent){
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent );
-        List<Price> prices;
+//        List<Price> prices;
 
         if(scanningResult != null){
 
@@ -136,7 +137,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             pricesList = new ArrayList<HashMap<String, String>>();
             for( Price price : prices) {
                 HashMap<String, String> map = new HashMap<String, String>();
-                map.put("PRICE", String.valueOf(price.getBulkPrice()));
+                map.put("PRICE", "$"+String.valueOf(price.getBulkPrice()));
                 map.put("QUANTITY", String.valueOf(price.getBulkQuantity()));
                 map.put("DATE", price.getTimeStamp().format("%Y-%m-%d"));
                 market = StorageManager.getInstance().findMarket(price.getMarketId());
@@ -146,6 +147,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             pricesAdapter = new SimpleAdapter(this, pricesList, R.layout.price_list_item_layout, pricesFrom, pricesTo);
 
             listView.setAdapter(pricesAdapter);
+
         }
         catch(Exception e){
             e.printStackTrace();
