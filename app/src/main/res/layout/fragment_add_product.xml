@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:textAllCaps="true"
-        android:textSize="@dimen/abc_text_size_display_1_material"
+        android:textSize="@dimen/abc_text_size_large_material"
         android:text="@string/label_product_not_foud"/>
 
     <LinearLayout
@@ -79,11 +79,18 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/label_product_category"/>
-        <EditText
+
+        <Spinner
+            android:id="@+id/spinnerProductCategory"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2" />
+
+        <!--EditText
             android:id="@+id/editProductCategory"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2"/>
+            android:layout_weight="2"/-->
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

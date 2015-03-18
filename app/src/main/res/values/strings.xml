@@ -13,5 +13,11 @@
     <string name="label_product_description">Descripción: </string>
     <string name="btn_accept">Aceptar</string>
     <string name="btn_cancel">Cancelar</string>
+    <string name="title_activity_add_price">AddPriceActivity</string>
+    <string name="lbl_total_price">Precio: $</string>
+    <string name="lbl_quantity">Cantidad:</string>
+    <string name="lbl_price_per_unit">Precio por unidad: $</string>
+    <string name="lbl_market">Comercio:</string>
+    <string name="lbl_date">Fecha:</string>
 
 </resources>

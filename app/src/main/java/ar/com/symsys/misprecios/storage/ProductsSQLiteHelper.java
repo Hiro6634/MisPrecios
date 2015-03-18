@@ -13,8 +13,8 @@ public class ProductsSQLiteHelper extends SQLiteOpenHelper {
     private static final int        dbVersion           = 1;
     private static final String     sqlCreateProducts   = "CREATE TABLE "
             + ProductsTableSchema.TABLE_NAME + " ("
-            + ProductsTableSchema.PRODUCT_ID    + " INTEGER PRIMARY KEY, "
-            + ProductsTableSchema.BRAND_ID      + " INTEGER, "
+            + ProductsTableSchema.PRODUCT_ID    + " TEXT PRIMARY KEY, "
+            + ProductsTableSchema.BRAND         + " TEXT, "
             + ProductsTableSchema.CATEGORY      + " TEXT, "
             + ProductsTableSchema.DESCRIPTION   + " TEXT)";
 
@@ -40,7 +40,7 @@ public class ProductsSQLiteHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
 
         values.put(ProductsTableSchema.PRODUCT_ID, "7790045824893");
-        values.put(ProductsTableSchema.BRAND_ID, 1);
+        values.put(ProductsTableSchema.BRAND, "Granix");
         values.put(ProductsTableSchema.CATEGORY, "Almacen");
         values.put(ProductsTableSchema.DESCRIPTION, "Galletas de Avena y Pasas");
 

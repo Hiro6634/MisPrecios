@@ -1,4 +1,4 @@
-package ar.com.symsys.misprecios;
+package ar.com.symsys.misprecios.Activities;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -27,6 +27,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+import ar.com.symsys.misprecios.R;
+import ar.com.symsys.misprecios.ToolsActivity;
 import ar.com.symsys.misprecios.storage.Market;
 import ar.com.symsys.misprecios.storage.MarketsTableSchema;
 import ar.com.symsys.misprecios.storage.Price;
@@ -43,7 +45,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private int[]                           pricesTo;
     private SimpleAdapter                   pricesAdapter = null;
     private static List<Price>              prices;
-    private static String                   productId;
+    private static Product                  product;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +74,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         if(prices != null && prices.size() > 0){
 
-            ShowResults(productId, prices);
+            ShowResults(product.getProductId(), prices);
         }
     }
     @Override
@@ -112,20 +114,31 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         if(scanningResult != null){
 
-            productId = scanningResult.getContents();
+            String productId = scanningResult.getContents();
 
             if( productId != null) {
-                prices = StorageManager.getInstance().findPriceByProductId(productId);
 
-                if (prices.size() == 0) {
+                product = StorageManager.getInstance().findProductById(productId);
+
+                if( product == null ){
                     Intent toolIntent = new Intent(this, ToolsActivity.class);
+                    toolIntent.putExtra(ToolsActivity.ACTION, ToolsActivity.ADD_PRODUCT);
                     toolIntent.putExtra(ToolsActivity.PRODUCT_ID, productId);
                     startActivity(toolIntent);
                 }
                 else
                 {
-//                    Toast.makeText(getApplicationContext(),"Ahora los resultados", Toast.LENGTH_SHORT).show();
-                    ShowResults(productId, prices);
+                    prices = StorageManager.getInstance().findPriceByProductId(productId);
+
+                    if (prices.size() > 0) {
+                        ShowResults(productId, prices);
+                    }
+                    else
+                    {
+                        Intent addPriceIntent = new Intent(this, AddPriceActivity.class);
+                        addPriceIntent.putExtra(AddPriceActivity.PRODUCT_ID, productId);
+                        startActivity(addPriceIntent);
+                    }
                 }
             }
         }

@@ -38,7 +38,7 @@ public class ProductsDataSource {
                 ContentValues values = new ContentValues();
 
                 values.put(ProductsTableSchema.PRODUCT_ID, product.getProductId());
-                values.put(ProductsTableSchema.BRAND_ID, product.getBrandId());
+                values.put(ProductsTableSchema.BRAND, product.getBrand());
                 values.put(ProductsTableSchema.CATEGORY, product.getCategory());
                 values.put(ProductsTableSchema.DESCRIPTION, product.getDescription());
             } catch (Exception e) {
@@ -115,8 +115,8 @@ public class ProductsDataSource {
     public Product readCursor( Cursor cursor ){
         Product             product = new Product();
 
-        product.setProductId(cursor.getLong(ProductsTableSchema.colPRODUCT_ID));
-        product.setBrandId(cursor.getInt(ProductsTableSchema.colBRAND_ID));
+        product.setProductId(cursor.getString(ProductsTableSchema.colPRODUCT_ID));
+        product.setBrand(cursor.getString(ProductsTableSchema.colBRAND));
         product.setCategory(cursor.getString(ProductsTableSchema.colCATEGORY));
         product.setDescription(cursor.getString(ProductsTableSchema.colDESCRIPTION));
 

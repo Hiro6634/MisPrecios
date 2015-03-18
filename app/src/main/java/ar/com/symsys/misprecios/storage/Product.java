@@ -4,25 +4,25 @@ package ar.com.symsys.misprecios.storage;
  * Created by hsuyama on 10/03/2015.
  */
 public class Product {
-    private long        ProductId;
-    private int         BrandId;
+    private String      ProductId;
+    private String      Brand;
     private String      Category;
     private String      Description;
 
-    public long getProductId() {
+    public String getProductId() {
         return ProductId;
     }
 
-    public void setProductId(long productId) {
+    public void setProductId(String productId) {
         ProductId = productId;
     }
 
-    public int getBrandId() {
-        return BrandId;
+    public String getBrand() {
+        return Brand;
     }
 
-    public void setBrandId(int brandId) {
-        BrandId = brandId;
+    public void setBrand(String brand) {
+        Brand = brand;
     }
 
     public String getCategory() {

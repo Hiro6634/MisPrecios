@@ -23,6 +23,10 @@
             android:name=".ToolsActivity"
             android:label="@string/title_activity_tools" >
         </activity>
+        <activity
+            android:name=".Activities.AddPriceActivity"
+            android:label="@string/title_activity_add_price" >
+        </activity>
     </application>
 
 </manifest>

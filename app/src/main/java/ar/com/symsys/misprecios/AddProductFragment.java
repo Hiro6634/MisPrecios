@@ -8,14 +8,24 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.SimpleAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.google.android.gms.plus.PlusOneButton;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import ar.com.symsys.misprecios.storage.Product;
+import ar.com.symsys.misprecios.storage.StorageManager;
 
 /**
  * A fragment with a Google +1 button.
@@ -27,8 +37,11 @@ import com.google.android.gms.plus.PlusOneButton;
  */
 public class AddProductFragment extends Fragment implements View.OnClickListener{
 
-    LinearLayout linearLayout;
-    EditText etProductId;
+    private LinearLayout linearLayout;
+    private EditText etProductId;
+    private EditText etDescription;
+    private EditText etBrand;
+    private Spinner  spCategory;
 
     Button      btnAccept, btnCancel;
 
@@ -38,13 +51,24 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 
         View view = inflater.inflate(R.layout.fragment_add_product, container, false );
 
-        linearLayout = (LinearLayout)view.findViewById(R.id.linearLayout);
-        etProductId = (EditText)view.findViewById(R.id.editProductId);
-        btnAccept = (Button)view.findViewById(R.id.btn_add_product_accept);
-        btnCancel = (Button)view.findViewById(R.id.btn_add_product_cancel);
+        linearLayout    = (LinearLayout)view.findViewById(R.id.linearLayout);
+        etProductId     = (EditText)view.findViewById(R.id.editProductId);
+        etBrand         = (EditText)view.findViewById(R.id.editProductBrand);
+        etDescription   = (EditText)view.findViewById(R.id.editProductDescription);
+        spCategory      = (Spinner)view.findViewById(R.id.spinnerProductCategory);
+        btnAccept       = (Button)view.findViewById(R.id.btn_add_product_accept);
+        btnCancel       = (Button)view.findViewById(R.id.btn_add_product_cancel);
 
         btnAccept.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
+
+        String[] arrayCategories = new String[]{"Almacen", "Limpieza", "Perfumería"};
+        ArrayList<String> categories = new ArrayList<String>(Arrays.asList(arrayCategories));
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                getActivity().getApplicationContext(),
+                R.layout.spinner_list_item,
+                categories);
+        spCategory.setAdapter(adapter);
 
         return view;
     }
@@ -61,6 +85,12 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         switch (view.getId()){
             case R.id.btn_add_product_accept:
                 Toast.makeText(getActivity().getApplicationContext(),"Saving Data Fake",Toast.LENGTH_SHORT).show();
+                Product product = new Product();
+                product.setProductId(((ToolsActivity)getActivity()).getProductId());
+                product.setDescription(etDescription.toString());
+                product.setBrand(etBrand.toString());
+                product.setCategory(spCategory.getSelectedItem().toString());
+
                 break;
 
             case R.id.btn_add_product_cancel:
