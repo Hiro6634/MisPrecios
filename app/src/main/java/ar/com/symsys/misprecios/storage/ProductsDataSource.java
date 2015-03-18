@@ -84,6 +84,34 @@ public class ProductsDataSource {
         return productList;
     }
 
+    public Product findProductById( String productId) {
+        Product product = null;
+        synchronized (this) {
+            try {
+                openDataBase();
+
+                Cursor cursor = database.query(
+                        ProductsTableSchema.TABLE_NAME,
+                        ProductsTableSchema.COLUMNS,
+                        ProductsTableSchema.PRODUCT_ID + " = ?",
+                        new String[]{productId}, null, null, null);
+
+                if (cursor.moveToFirst()) {
+                    product = readCursor(cursor);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    closeDataBase();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return product;
+    }
+
     public Product readCursor( Cursor cursor ){
         Product             product = new Product();
 

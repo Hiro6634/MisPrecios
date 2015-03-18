@@ -30,17 +30,20 @@ import java.util.ListIterator;
 import ar.com.symsys.misprecios.storage.Market;
 import ar.com.symsys.misprecios.storage.MarketsTableSchema;
 import ar.com.symsys.misprecios.storage.Price;
+import ar.com.symsys.misprecios.storage.Product;
 import ar.com.symsys.misprecios.storage.StorageManager;
 
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener{
     private Button                          btnButton;
     private ListView                        listView;
+    private TextView                        tvProductInfo;
     private List<HashMap<String, String>>   pricesList = null;
     private String[]                        pricesFrom;
     private int[]                           pricesTo;
     private SimpleAdapter                   pricesAdapter = null;
     private static List<Price>              prices;
+    private static String                   productId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +51,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         StorageManager.getInstance().setContext(getApplicationContext());
 
-        btnButton   = (Button)findViewById(R.id.scan_button);
+        btnButton       = (Button)findViewById(R.id.scan_button);
+        tvProductInfo   = (TextView)findViewById(R.id.productInfoTextView);
 
         btnButton.setOnClickListener(this);
         pricesFrom = new String[]{
@@ -58,6 +62,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 "MARKET"};
         pricesTo = new int[]{R.id.price, R.id.quantity, R.id.date, R.id.market_name};
 
+        tvProductInfo.setText("");
     }
 
     @Override
@@ -67,7 +72,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         if(prices != null && prices.size() > 0){
 
-            ShowResults(prices);
+            ShowResults(productId, prices);
         }
     }
     @Override
@@ -107,20 +112,20 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         if(scanningResult != null){
 
-            String scanContent = scanningResult.getContents();
+            productId = scanningResult.getContents();
 
-            if( scanContent != null) {
-                prices = StorageManager.getInstance().findPriceByProductId(scanContent);
+            if( productId != null) {
+                prices = StorageManager.getInstance().findPriceByProductId(productId);
 
                 if (prices.size() == 0) {
                     Intent toolIntent = new Intent(this, ToolsActivity.class);
-                    toolIntent.putExtra(ToolsActivity.PRODUCT_ID, scanContent);
+                    toolIntent.putExtra(ToolsActivity.PRODUCT_ID, productId);
                     startActivity(toolIntent);
                 }
                 else
                 {
-                    Toast.makeText(getApplicationContext(),"Ahora los resultados", Toast.LENGTH_SHORT).show();
-                    ShowResults(prices);
+//                    Toast.makeText(getApplicationContext(),"Ahora los resultados", Toast.LENGTH_SHORT).show();
+                    ShowResults(productId, prices);
                 }
             }
         }
@@ -128,11 +133,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             Toast.makeText(getApplicationContext(),"No scan data received!", Toast.LENGTH_SHORT).show();
         }
     }
-    protected void ShowResults( List<Price> prices ){
+    protected void ShowResults( String productId, List<Price> prices ){
         ListView listView = (ListView)findViewById(R.id.listView);
 
         try{
             Market market;
+
+            tvProductInfo.setText(StorageManager.getInstance().findProductById(productId).getDescription());
 
             pricesList = new ArrayList<HashMap<String, String>>();
             for( Price price : prices) {
@@ -147,6 +154,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             pricesAdapter = new SimpleAdapter(this, pricesList, R.layout.price_list_item_layout, pricesFrom, pricesTo);
 
             listView.setAdapter(pricesAdapter);
+
 
         }
         catch(Exception e){
